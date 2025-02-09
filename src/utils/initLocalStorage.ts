@@ -1,8 +1,7 @@
 export const initializeLocalStorage = () => {
   const data = localStorage.getItem("usersData");
   const parsedData = data ? JSON.parse(data) : {};
-
-  // Check if parsed data is empty or has fewer than 10 users
+ 
   if (Object.keys(parsedData).length < 10) {
     const sampleData = {
       john_doe: {

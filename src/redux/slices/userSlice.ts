@@ -16,7 +16,6 @@ const initialState: UserState = {
   currentUser: localStorage.getItem("currentUser") || null,
 };
 
-
 const userSlice = createSlice({
   name: "users",
   initialState,
@@ -27,28 +26,28 @@ const userSlice = createSlice({
     },
 
     addUser(
-  state,
-  action: PayloadAction<{ username: string; timezone: string }>
-) {
-  const { username, timezone } = action.payload;
- 
-  const existingUsers = JSON.parse(localStorage.getItem("usersData") || "{}");
- 
-  const updatedUsers = {
-    ...existingUsers,  
-    ...state.users,    
-    [username]: { username, timezone, availability: {} },  
-  };
- 
-  state.users = updatedUsers;
- 
-  localStorage.setItem("usersData", JSON.stringify(updatedUsers));
- 
-  state.currentUser = username;
-  localStorage.setItem("currentUser", username);
-}
-,
+      state,
+      action: PayloadAction<{ username: string; timezone: string }>
+    ) {
+      const { username, timezone } = action.payload;
+  
+      const existingUsers = JSON.parse(
+        localStorage.getItem("usersData") || "{}"
+      );
 
+      const updatedUsers = {
+        ...existingUsers,
+        ...state.users,
+        [username]: { username, timezone, availability: {} },
+      };
+
+      state.users = updatedUsers;
+
+      localStorage.setItem("usersData", JSON.stringify(updatedUsers));
+
+      state.currentUser = username;
+      localStorage.setItem("currentUser", username);
+    },
     updateUser(state: any, action: any) {
       state.currentUser = action.payload.username;
       state.timezone = action.payload.timezone;

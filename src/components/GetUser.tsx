@@ -10,8 +10,10 @@ const GetUser = () => {
   const [detectedTimezone, setDetectedTimezone] = useState("");
   const [timezoneOffset, setTimezoneOffset] = useState("");
   const dispatch = useDispatch();
+  const [statusPass, setStatusPass] = useState(false); // false
   const navigate = useNavigate();
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
+  const [usersData, setUsersData]: any = useState();
 
   const timezoneOffsets = [
     { value: "UTC-08:00", label: "Pacific Time (PST) - UTC-08:00" },
@@ -36,9 +38,10 @@ const GetUser = () => {
     { value: "UTC+09:30", label: "Australian Central Time (ACST) - UTC+09:30" },
     { value: "UTC+10:00", label: "Australian Eastern Time (AEST) - UTC+10:00" },
     { value: "UTC+12:00", label: "New Zealand Time (NZST) - UTC+12:00" },
-  ];
+  ]
 
   useEffect(() => {
+    setUsersData(JSON.parse(localStorage.getItem("usersData") || "{}"));
     initializeLocalStorage();
     const detectedTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
     setDetectedTimezone(detectedTz);
@@ -53,19 +56,33 @@ const GetUser = () => {
   }, []);
 
   useEffect(() => {
-    if (currentUser) {
-      navigate(`/dashboard/${currentUser}`);
+    if (currentUser && statusPass === true) {
+      navigate(`/dashboard/${currentUser}`); // dashboard/${currentUser}
     } else {
       navigate("/");
     }
   }, [currentUser, navigate]);
 
   const handleSubmit = () => {
+    const usersDataKeys = Reflect.ownKeys(usersData);
+    // console.log("oandkladask", username);
+    const findUser = usersDataKeys.find((el) => {
+      return el === username;
+    });
+    // console.log(findUser);
+    // for (let i = 0; i <= usersDataKeys.length - 1; i++) {
+    if (findUser) {
+      setStatusPass(false);
+      alert("Please enter a different username because this is already taken");
+    } else {
+      setStatusPass(true);
+      dispatch(addUser({ username: username, timezone: timezoneOffset }));
+    }
+    // }
     if (!username.trim()) {
       alert("Please enter your name");
       return;
     }
-    dispatch(addUser({ username: username, timezone: timezoneOffset }));
   };
 
   return (
@@ -126,3 +143,4 @@ const GetUser = () => {
 };
 
 export default GetUser;
+ 
