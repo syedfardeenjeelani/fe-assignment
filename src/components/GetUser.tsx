@@ -37,20 +37,21 @@ const GetUser = () => {
     { value: "UTC+10:00", label: "Australian Eastern Time (AEST) - UTC+10:00" },
     { value: "UTC+12:00", label: "New Zealand Time (NZST) - UTC+12:00" },
   ];
+
   useEffect(() => {
-     initializeLocalStorage();
+    initializeLocalStorage();
     const detectedTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
     setDetectedTimezone(detectedTz);
     const date = new Date();
     const options: any = { timeZoneName: "short" };
     const locale = "en-US";
-    const computedOffset : any = date
+    const computedOffset: any = date
       .toLocaleString(locale, options)
       .split(" ")
       .pop();
     setTimezoneOffset(computedOffset);
   }, []);
- 
+
   useEffect(() => {
     if (currentUser) {
       navigate(`/dashboard/${currentUser}`);
@@ -64,7 +65,7 @@ const GetUser = () => {
       alert("Please enter your name");
       return;
     }
-    dispatch(addUser({ username, timezone: timezoneOffset }));
+    dispatch(addUser({ username: username, timezone: timezoneOffset }));
   };
 
   return (
