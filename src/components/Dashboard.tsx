@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { initializeLocalStorage } from "../utils/initLocalStorage";
 
 const Dashboard = () => {
   const currentUser = useSelector((state: any) => state.user.currentUser);
-  const usersData = useSelector((state: any) => state.user);
+  const usersData = useSelector((state: any) => state.user.users);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -13,14 +13,13 @@ const Dashboard = () => {
     if (currentUser) {
       navigate(`/dashboard/${currentUser}`);
     } else {
-      navigate("/");
+      navigate("/NeedToLogin");
     }
   }, [currentUser, navigate]);
 
   const findYourProfile = () => {
     
-    initializeLocalStorage();
-    console.log(usersData)
+    initializeLocalStorage(); 
     if (currentUser && usersData[currentUser]) {
       console.log("Your Profile:", usersData[currentUser]);
       console.log('All profiles',usersData)
